@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIXEL FACE: MISI AYAT</title>
+<style>
+:root{--bg:#020d07;--pn:#06190e;--g:#39ff6a;--gm:#b6ffcf;--pt:#ffffff;--x:#ff7a7a}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--pt);font-family:"Courier New",Courier,monospace;font-weight:700;font-size:16px;line-height:1.5;display:flex;justify-content:center;padding:12px;min-height:100vh;
+background-image:linear-gradient(rgba(57,255,106,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,106,.08) 1px,transparent 1px);background-size:22px 22px}
+#app{width:100%;max-width:720px}
+.s{display:none;text-align:center;animation:masuk .3s steps(4)}
+.s.on{display:block}
+@keyframes masuk{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{font-size:clamp(24px,7vw,44px);line-height:1.2;letter-spacing:2px;color:#fff;margin:10px 0 8px;text-shadow:0 0 6px var(--g),0 0 18px var(--g),0 0 34px var(--g),3px 3px 0 #0a5c22}
+h2{font-size:clamp(20px,5vw,28px);color:var(--g);text-shadow:0 0 10px var(--g);margin:12px 0}
+p{margin:8px 0}
+.sub{color:var(--gm);font-size:clamp(14px,3.6vw,18px);margin-bottom:12px}
+#maskot{width:80px;height:80px;margin:18px auto 14px;animation:apung 1s steps(2) infinite}
+@keyframes apung{50%{transform:translateY(8px)}}
+.btn{display:block;width:100%;max-width:380px;margin:12px auto;font:inherit;font-size:clamp(14px,3.6vw,17px);letter-spacing:1px;padding:12px;cursor:pointer;color:var(--g);background:var(--pn);border:4px solid var(--g);box-shadow:0 0 12px var(--g),inset 0 0 10px rgba(57,255,106,.12);text-shadow:0 0 8px var(--g);transition:transform .08s}
+.btn:hover,.btn:focus-visible{background:var(--g);color:#021a0c;text-shadow:none;outline:none}
+.btn:active{transform:translateY(3px)}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn.p{border-color:#fff;color:#fff;box-shadow:0 0 10px #fff;text-shadow:none}
+.btn.p:hover{background:#fff;color:#021a0c}
+.baris{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.baris .btn{width:auto;flex:1 1 150px;margin:5px 0;font-size:14px;padding:10px}
+.kotak{background:var(--pn);border:4px solid var(--g);box-shadow:0 0 16px rgba(57,255,106,.5);padding:14px 16px;margin:12px 0;text-align:left}
+.kotak li{margin:8px 0 8px 22px}
+.kotak.c{text-align:center}
+.kecil{font-size:14px;font-weight:400;color:var(--gm)}
+.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--pn);border:4px solid var(--g);padding:8px;font-size:13px}
+.hud b{display:block;font-size:20px;color:var(--g)}
+#bar{height:12px;border:3px solid var(--g);margin:8px 0}
+#bar i{display:block;height:100%;width:100%;background:var(--g);box-shadow:0 0 10px var(--g)}
+#ayat{font-size:clamp(20px,5.6vw,32px);line-height:1.4;color:#fff;margin:8px 0;text-shadow:0 0 8px rgba(57,255,106,.7);min-height:90px;display:grid;place-items:center}
+.leg{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-size:13px;margin-top:6px}
+.leg span{display:flex;align-items:center;gap:6px}
+.cam{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin:10px 0}
+video{width:200px;max-width:100%;aspect-ratio:4/3;background:#000;border:4px solid var(--g);box-shadow:0 0 14px var(--g);transform:scaleX(-1);object-fit:cover}
+.det{text-align:center;min-width:130px}
+.stat{min-height:44px;font-size:14px;font-weight:400;color:var(--gm);margin:6px 0}
+.stat.er{color:var(--x)}
+#tahan{height:10px;border:2px solid var(--g);margin:6px auto;width:130px}
+#tahan i{display:block;height:100%;width:0;background:var(--g)}
+.met{text-align:left;font-size:13px;margin:4px 0}
+.met div{height:10px;border:2px solid var(--g);margin-top:2px}
+.met i{display:block;height:100%;width:0;background:var(--g)}
+#fb{display:none;margin-top:10px;padding:12px;border:4px solid var(--g);background:var(--pn);text-align:left;box-shadow:0 0 14px var(--g)}
+#fb.on{display:block}
+#fb.x{border-color:var(--x);box-shadow:0 0 14px var(--x)}
+#fbt{font-size:clamp(18px,5vw,24px);color:var(--g);text-shadow:0 0 10px var(--g)}
+#fb.x #fbt{color:var(--x);text-shadow:none}
+.fbl{font-weight:400;font-size:15px;margin:5px 0}
+.fbl b{color:var(--g)}
+.ops{display:none;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.ops.on{display:grid}
+.ops .btn{max-width:none;margin:0;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(13px,3.6vw,16px)}
+#skor{font-size:clamp(40px,12vw,72px);color:var(--g);text-shadow:0 0 14px var(--g);margin:6px 0}
+#gelar{font-size:clamp(22px,6vw,32px);color:#fff;text-shadow:0 0 10px var(--g)}
+.px{position:fixed;width:10px;height:10px;pointer-events:none;z-index:9;background:var(--g);box-shadow:0 0 6px var(--g);animation:terbang 1s steps(10) forwards}
+@keyframes terbang{to{transform:translate(var(--x),var(--y));opacity:0}}
+.kilat{animation:kl .5s steps(3)}
+@keyframes kl{0%{box-shadow:inset 0 0 0 100vmax var(--k)}}
+@media (max-width:480px){.ops{grid-template-columns:1fr}.hud{font-size:11px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app">
+
+<section class="s on" id="s-menu">
+  <div id="maskot"></div>
+  <h1>PIXEL FACE:<br>MISI AYAT</h1>
+  <p class="sub">Kenali Kesalahan Ayat dengan Ekspresi Wajah Anda!</p>
+  <button class="btn" id="bMula">MULA PERMAINAN</button>
+  <button class="btn" data-go="cara">CARA BERMAIN</button>
+  <button class="btn" data-go="kamera">AKTIFKAN KAMERA</button>
+  <button class="btn" data-go="tetapan">TETAPAN PERMAINAN</button>
+</section>
+
+<section class="s" id="s-cara">
+  <h2>CARA BERMAIN</h2>
+  <div class="kotak"><ul>
+    <li>Aktifkan kamera (atau guna mod manual jika kamera tidak tersedia).</li>
+    <li>Satu ayat akan dipaparkan. Baca ayat itu dan tentukan sama ada ayat itu <b>betul</b> atau <b>salah</b>.</li>
+    <li>Ayat betul: tunjukkan <b>wajah gembira</b> dengan tersenyum lebar.</li>
+    <li>Ayat salah: tunjukkan <b>wajah terkejut</b> dengan membuka mulut dan mendepakan mata atau menaikkan kening.</li>
+    <li>Tahan ekspresi anda sekitar satu saat sehingga bar penuh. Anda ada masa untuk bertindak balas bagi setiap soalan.</li>
+    <li>Jawapan betul +10 markah. Jawapan betul berturut-turut mendapat bonus 5 markah.</li>
+    <li>Selepas setiap soalan, anda akan melihat jawapan, pembetulan dan penerangan.</li>
+    <li><b>Privasi:</b> video diproses dalam pelayar anda sahaja. Tiada gambar atau video dirakam, disimpan atau dihantar.</li>
+  </ul></div>
+  <button class="btn" data-go="menu">KEMBALI KE MENU UTAMA</button>
+</section>
+
+<section class="s" id="s-kamera">
+  <h2>AKTIFKAN KAMERA</h2>
+  <div class="kotak c kecil" style="color:var(--pt)">Kamera hanya digunakan untuk mengesan senyuman dan wajah terkejut anda. Video diproses dalam pelayar ini sahaja. Tiada gambar atau video dirakam, disimpan atau dihantar ke mana-mana pelayan. Fail sistem pengesanan wajah dimuat turun daripada internet, tetapi imej kamera anda tidak dihantar.</div>
+  <div class="cam">
+    <video id="v1" muted playsinline></video>
+    <div class="det"><div id="dik1"></div><div id="dtx1" class="kecil">Wajah belum dikesan</div></div>
+  </div>
+  <div class="met" id="met" style="max-width:300px;margin:6px auto;display:none">
+    Senyuman<div><i id="m1"></i></div>Mulut dibuka<div><i id="m2"></i></div>Kening dan mata<div><i id="m3"></i></div>
+  </div>
+  <div class="stat" id="st1">Kamera belum diaktifkan.</div>
+  <button class="btn" id="bAktif">SAYA SETUJU, AKTIFKAN KAMERA</button>
+  <button class="btn p" id="bMati1">MATIKAN KAMERA</button>
+  <button class="btn" id="bTab" style="display:none">BUKA DALAM TAB BAHARU</button>
+  <button class="btn" id="bManual">GUNA MOD MANUAL (TANPA KAMERA)</button>
+  <button class="btn p" id="bLanjut" style="display:none">SETERUSNYA: PILIH TAHAP</button>
+  <button class="btn p" data-go="menu">KEMBALI KE MENU UTAMA</button>
+</section>
+
+<section class="s" id="s-tetapan">
+  <h2>TETAPAN PERMAINAN</h2>
+  <button class="btn" id="bMod"></button>
+  <button class="btn" id="bKep"></button>
+  <button class="btn" id="bMasa"></button>
+  <p class="kecil">Jika senyuman atau wajah terkejut sukar dikesan, tingkatkan kepekaan.</p>
+  <button class="btn p" data-go="menu">KEMBALI KE MENU UTAMA</button>
+</section>
+
+<section class="s" id="s-tahap">
+  <h2>PILIH TAHAP</h2>
+  <button class="btn" data-t="1">TAHAP 1: MUDAH</button>
+  <button class="btn" data-t="2">TAHAP 2: SEDERHANA</button>
+  <button class="btn" data-t="3">TAHAP 3: SUKAR</button>
+  <button class="btn" data-t="0">SEMUA TAHAP (CAMPURAN)</button>
+  <button class="btn p" data-go="menu">KEMBALI KE MENU UTAMA</button>
+</section>
+
+<section class="s" id="s-arahan">
+  <h2>ARAHAN PUSINGAN</h2>
+  <div class="kotak c">
+    <p id="aTahap"></p>
+    <p>Baca setiap ayat dengan teliti.</p>
+    <div class="leg" id="aLeg" style="font-size:15px;gap:20px"></div>
+    <p class="kecil" id="aMod"></p>
+  </div>
+  <button class="btn" id="bMulaP">MULA PUSINGAN</button>
+  <button class="btn p" data-go="tahap">PILIH TAHAP</button>
+</section>
+
+<section class="s" id="s-main">
+  <div class="hud"><div>Markah<b id="hSkor">0</b></div><div>Soalan<b id="hSoal">1/10</b></div><div>Masa<b id="hMasa">8</b></div></div>
+  <div id="bar"><i></i></div>
+  <div class="kotak c">
+    <div class="kecil" id="mTahap"></div>
+    <div id="ayat"></div>
+    <div class="leg" id="mLeg"></div>
+  </div>
+  <div class="cam" id="camBox">
+    <video id="v2" muted playsinline></video>
+    <div class="det"><div id="dik2"></div><div id="dtx2" class="kecil">Wajah belum dikesan</div><div id="tahan"><i></i></div></div>
+  </div>
+  <div class="stat" id="st2"></div>
+  <div class="ops" id="ops">
+    <button class="btn" id="bBetul"></button>
+    <button class="btn" id="bSalah"></button>
+  </div>
+  <div id="fb"><div id="fbt"></div><div class="fbl" id="fb1"></div><div class="fbl" id="fb2"></div><div class="fbl" id="fb3"></div><div class="fbl" id="fb4"></div><button class="btn" id="nxt" style="margin-bottom:0"></button></div>
+  <div class="baris" style="margin-top:14px">
+    <button class="btn p" id="bMati2" style="font-size:13px">MATIKAN KAMERA</button>
+    <button class="btn p" data-go="tahap" style="font-size:13px">KELUAR KE PILIHAN TAHAP</button>
+  </div>
+</section>
+
+<section class="s" id="s-tamat">
+  <h2>TAMAT PERMAINAN</h2>
+  <div id="skor">0</div>
+  <p>markah anda</p>
+  <div class="kotak c"><div id="gelar"></div><p id="ulasan"></p><p id="ringkas" class="kecil"></p></div>
+  <button class="btn" id="bUlang">MAIN SEMULA</button>
+  <button class="btn" data-go="tahap">PILIH TAHAP</button>
+  <button class="btn p" data-go="menu">KEMBALI KE MENU UTAMA</button>
+</section>
+
+</main>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const MODEL='https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+const LIB='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+const TAHAN=800,SEDIA=1500,JUMLAH=10;
+
+/* tahap|ayat|B atau S|pembetulan|penerangan */
+const D=`1|Ali pergi ke sekolah setiap hari.|B||Ayat ini lengkap kerana ada subjek, predikat dan keterangan.
+1|Ibu memasak nasi di dapur.|B||Ayat ini gramatis. Kata sendi nama «di» dieja terpisah.
+1|Adik membaca buku di perpustakaan.|B||Susunan subjek, predikat dan objek adalah betul.
+1|Kami bermain bola di padang.|B||Ayat ini betul dan mudah difahami.
+1|Ayah membeli ikan di pasar.|B||Ayat ini betul dari segi struktur dan pilihan kata.
+1|Mereka-mereka sedang bermain bola.|S|Mereka sedang bermain bola.|«Mereka» sudah menunjukkan jamak, maka tidak perlu digandakan.
+1|Amin sangat pandai sekali.|S|Amin sangat pandai.|Penggunaan kata penguat yang berlebihan menyebabkan ayat menjadi tidak gramatis. Ayat «Amin pandai sekali» juga betul.
+1|Kucing itu tidur diatas kerusi.|S|Kucing itu tidur di atas kerusi.|Kata sendi nama «di» dieja terpisah daripada «atas».
+1|Para-para murid berbaris di dewan.|S|Para murid berbaris di dewan.|«Para» sudah menunjukkan jamak, maka tidak perlu digandakan.
+1|Dia sangat amat suka membaca.|S|Dia sangat suka membaca.|Dua kata penguat yang sama fungsi tidak digunakan bersama. Ayat «Dia amat suka membaca» juga betul.
+2|Dia menghadiahkan sebuah buku kepada adiknya.|B||Ayat ini betul. Kata sendi nama «kepada» digunakan untuk penerima yang bernyawa.
+2|Mereka sedang membersihkan kawasan sekolah.|B||Kata kerja «membersihkan» betul dan sesuai dengan objeknya.
+2|Guru itu memberikan nasihat kepada murid-muridnya.|B||Ayat ini betul dari segi struktur dan penggunaan kata ganda.
+2|Murid-murid berkumpul di dataran sekolah.|B||Kata ganda «murid-murid» dan kata sendi nama «di» digunakan dengan betul.
+2|Kakak membeli sehelai baju untuk ibu.|B||Ayat ini betul. Penjodoh bilangan «helai» sesuai dengan «baju».
+2|Saya tidak tahu di mana kah buku itu.|S|Saya tidak tahu di manakah buku itu.|Partikel «-kah» dirapatkan pada «mana», manakala «di» dieja terpisah.
+2|Dia membincangkan tentang perkara itu.|S|Dia membincangkan perkara itu.|«Membincangkan» sudah bermakna berbual tentang sesuatu, maka «tentang» berlebihan.
+2|Buku itu di baca oleh Ali.|S|Buku itu dibaca oleh Ali.|«Di-» di hadapan kata kerja ialah awalan, maka dieja serangkai dengan kata kerja.
+2|Ramai pelajar-pelajar hadir ke majlis itu.|S|Ramai pelajar hadir ke majlis itu.|«Ramai» sudah menunjukkan jamak, maka kata nama tidak perlu digandakan.
+2|Para-para pelajar sedang berkumpul.|S|Para pelajar sedang berkumpul.|«Para» sudah menunjukkan jamak, maka tidak perlu digandakan.
+3|Walaupun hujan lebat, mereka tetap pergi ke sekolah.|B||Ayat ini betul. «Walaupun» tidak perlu dipasangkan dengan «tetapi».
+3|Buku itu saya baca semalam.|B||Dalam ayat pasif dengan kata ganti nama diri pertama, kata kerja tidak menggunakan «di-».
+3|Dia lebih tinggi daripada abangnya.|B||Untuk perbandingan, gunakan kata sendi nama «daripada».
+3|Kami berbincang tentang rancangan itu.|B||«Berbincang» digunakan bersama «tentang», maka ayat ini betul.
+3|Oleh sebab hari hujan, pertandingan itu ditangguhkan.|B||Kata hubung «oleh sebab» digunakan dengan betul untuk menyatakan sebab.
+3|Ibu membeli tiga kilogram gula di kedai.|B||Ayat ini betul. Susunan bilangan, unit dan kata nama adalah tepat.
+3|Walaupun hujan lebat tetapi mereka tetap pergi ke sekolah.|S|Walaupun hujan lebat, mereka tetap pergi ke sekolah.|Kata hubung «walaupun» tidak berpasangan dengan «tetapi». Salah satu sahaja sudah cukup.
+3|Buku itu dibaca oleh saya semalam.|S|Buku itu saya baca semalam.|Dalam ayat pasif dengan kata ganti nama diri pertama, kata kerja tidak menggunakan «di-» dan «oleh» tidak diperlukan.
+3|Adik saya yang paling tertinggi dalam kelas.|S|Adik saya yang paling tinggi dalam kelas.|«Paling» dan awalan «ter-» sama-sama menunjukkan darjah tertinggi, maka tidak digunakan bersama.
+3|Mereka saling bantu-membantu.|S|Mereka saling membantu.|«Saling» sudah bermaksud berbalas-balasan, maka bentuk «bantu-membantu» berlebihan.
+3|Dia rajin belajar kerana supaya lulus peperiksaan.|S|Dia rajin belajar supaya lulus peperiksaan.|«Kerana» dan «supaya» mempunyai fungsi berbeza dan tidak digunakan bersama.
+3|Dia menyerahkan surat itu pada guru besar.|S|Dia menyerahkan surat itu kepada guru besar.|Untuk penerima yang bernyawa, gunakan «kepada». «Pada» digunakan untuk tempat atau masa.`
+.split('\n').map(l=>{const p=l.split('|');return{t:+p[0],a:p[1],b:p[2]==='B',p:p[3],e:p[4]}});
+
+/* ---- tetapan (hanya dalam ingatan, tiada penyimpanan) ---- */
+const S={mod:'kamera',kep:1,masa:8};
+const KEP=[1.25,1,.8],KN=['RENDAH','SEDERHANA','TINGGI'],MS=[6,8,10,12];
+function tetapan(){$('#bMod').textContent='MOD JAWAPAN: '+(S.mod==='kamera'?'KAMERA':'BUTANG MANUAL');$('#bKep').textContent='KEPEKAAN WAJAH: '+KN[S.kep];$('#bMasa').textContent='MASA MENJAWAB: '+S.masa+' SAAT'}
+$('#bMod').onclick=()=>{S.mod=S.mod==='kamera'?'manual':'kamera';tetapan()};
+$('#bKep').onclick=()=>{S.kep=(S.kep+1)%3;tetapan()};
+$('#bMasa').onclick=()=>{S.masa=MS[(MS.indexOf(S.masa)+1)%MS.length];tetapan()};
+const efektif=()=>S.mod==='kamera'&&aktif?'kamera':'manual';
+
+/* ---- ikon piksel ---- */
+const PAT={
+biasa:['..######..','.########.','##########','##o####o##','##o####o##','##########','##########','###oooo###','.########.','..######..'],
+gembira:['..######..','.########.','##########','##o####o##','##o####o##','##########','#o######o#','##oooooo##','.########.','..######..'],
+terkejut:['..######..','.########.','##########','#oo####oo#','#oo####oo#','##########','###oooo###','###o##o###','.##oooo##.','..######..']};
+function ikon(n,u){const s=[];PAT[n].forEach((r,y)=>[...r].forEach((c,x)=>{if(c!=='.')s.push(x*u+'px '+y*u+'px 0 '+(c==='o'?'#021a0c':'#39ff6a'))}));
+  const w=document.createElement('div');w.style.cssText='width:'+u*10+'px;height:'+u*10+'px;position:relative;display:inline-block;flex:none';
+  const d=document.createElement('div');d.style.cssText='width:'+u+'px;height:'+u+'px;box-shadow:'+s.join(',');w.appendChild(d);return w}
+function pasang(el,n,u){el.innerHTML='';el.appendChild(ikon(n,u));el.style.cssText+=';display:flex;justify-content:center'}
+function legenda(el,u){el.innerHTML='';[['gembira','Ayat betul: wajah gembira'],['terkejut','Ayat salah: wajah terkejut']].forEach(a=>{const s=document.createElement('span');s.appendChild(ikon(a[0],u));s.appendChild(document.createTextNode(a[1]));el.appendChild(s)})}
+(function(){const m=$('#maskot'),n=['biasa','gembira','terkejut'];let i=0;const f=()=>{m.innerHTML='';m.appendChild(ikon(n[i++%3],8))};f();setInterval(f,1100)})();
+pasang($('#dik1'),'biasa',4);pasang($('#dik2'),'biasa',4);
+
+/* ---- skrin ---- */
+let aktif=false,stream=null,lm=null,raf=0;
+function show(id){document.querySelectorAll('.s').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));window.scrollTo(0,0);
+  if(id!=='main'){clearInterval(G.tm);clearTimeout(G.ts);G.fasa='henti'}
+  if(id==='tetapan')tetapan();
+  if(id==='kamera')kemasKamera()}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){show(g.dataset.go);return}
+  const t=e.target.closest('[data-t]');if(t)arahan(+t.dataset.t)});
+$('#bMula').onclick=()=>{if(S.mod==='kamera'&&!aktif)show('kamera');else show('tahap')};
+$('#bLanjut').onclick=()=>show('tahap');
+$('#bManual').onclick=()=>{S.mod='manual';matikan();show('tahap')};
+$('#bTab').onclick=()=>{try{window.open(location.href,'_blank')}catch(e){}};
+function kemasKamera(){
+  $('#bMati1').style.display=aktif?'block':'none';$('#bAktif').style.display=aktif?'none':'block';
+  $('#bLanjut').style.display=aktif?'block':'none';$('#met').style.display=aktif?'block':'none';
+  if(aktif)ujiStat('Kamera Diaktifkan. Cuba tersenyum dan tunjukkan wajah terkejut untuk menguji.');
+}
+function ujiStat(t,er){['#st1','#st2'].forEach(s=>{$(s).textContent=t;$(s).classList.toggle('er',!!er)})}
+
+/* ---- kamera dan pengesanan wajah ---- */
+async function muatModel(){
+  if(lm)return;
+  const m=await import(LIB+'/vision_bundle.mjs');
+  const fs=await m.FilesetResolver.forVisionTasks(LIB+'/wasm');
+  const buat=d=>m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:d},outputFaceBlendshapes:true,runningMode:'VIDEO',numFaces:1});
+  try{lm=await buat('GPU')}catch(e){lm=await buat('CPU')}
+}
+async function aktifkan(){
+  const b=$('#bAktif');b.disabled=true;$('#bTab').style.display='none';
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    ujiStat('Kamera tidak boleh digunakan di sini. Pastikan laman ini dibuka melalui HTTPS. Anda boleh menggunakan mod manual.',true);b.disabled=false;pilihTab();return}
+  ujiStat('Meminta kebenaran kamera... sila pilih "Benarkan".');
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false})}
+  catch(e){
+    const n=e&&e.name;
+    ujiStat(n==='NotAllowedError'||n==='SecurityError'?'Kebenaran kamera ditolak atau disekat. Benarkan kamera pada bar alamat pelayar. Jika permainan ini dibenamkan dalam Google Sites, kamera mungkin disekat. Cuba buka dalam tab baharu atau guna mod manual.':n==='NotFoundError'?'Kamera tidak ditemui pada peranti ini. Sila guna mod manual.':n==='NotReadableError'?'Kamera sedang digunakan oleh aplikasi lain. Tutup aplikasi itu dan cuba lagi.':'Kamera tidak dapat diaktifkan. Sila guna mod manual.',true);
+    b.disabled=false;pilihTab();return}
+  [$('#v1'),$('#v2')].forEach(v=>{v.srcObject=stream;v.play().catch(()=>{})});
+  ujiStat('Kamera Diaktifkan. Memuatkan sistem pengesanan wajah, sila tunggu...');
+  try{await muatModel()}
+  catch(e){matikan();ujiStat('Sistem pengesanan wajah gagal dimuatkan. Semak sambungan internet anda, atau guna mod manual.',true);b.disabled=false;return}
+  aktif=true;b.disabled=false;S.mod='kamera';kemasKamera();berehat=false;gelung();
+}
+function pilihTab(){if(window.top!==window)$('#bTab').style.display='block'}
+$('#bAktif').onclick=aktifkan;
+function matikan(){
+  aktif=false;cancelAnimationFrame(raf);
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  [$('#v1'),$('#v2')].forEach(v=>{v.srcObject=null});
+  pasang($('#dik1'),'biasa',4);pasang($('#dik2'),'biasa',4);
+  $('#dtx1').textContent=$('#dtx2').textContent='Kamera dimatikan';
+  ujiStat('Kamera dimatikan. Tiada rakaman disimpan.');
+  if($('#s-kamera').classList.contains('on'))kemasKamera();
+  if($('#s-main').classList.contains('on'))susunMain();
+}
+$('#bMati1').onclick=matikan;$('#bMati2').onclick=matikan;
+
+const N={s:0,j:0,b:0,w:0};let kini=null,tahanEx=null,tahanT=0,berehat=false,tsAkhir=0;
+function ekspresi(){
+  const k=KEP[S.kep],sm=N.s,jaw=N.j;
+  if(sm>=.45*k)return'gembira';
+  if(jaw>=.35*k&&sm<.3&&(N.b>=.2*k||N.w>=.15*k))return'terkejut';
+  return null;
+}
+function gelung(){
+  raf=requestAnimationFrame(gelung);
+  const now=performance.now();if(now-tsAkhir<50)return;tsAkhir=now;
+  const kam=$('#s-kamera').classList.contains('on'),mn=$('#s-main').classList.contains('on');
+  if(!lm||!(kam||mn))return;
+  const v=kam?$('#v1'):$('#v2');if(v.readyState<2)return;
+  let r;try{r=lm.detectForVideo(v,now)}catch(e){return}
+  const ada=r&&r.faceBlendshapes&&r.faceBlendshapes.length>0;
+  const id=kam?'1':'2';
+  if(!ada){kini=null;tahanEx=null;pasang($('#dik'+id),'biasa',4);$('#dtx'+id).textContent='Wajah tidak dikesan. Hadapkan wajah ke kamera.';tahanBar(0);return}
+  const g={};r.faceBlendshapes[0].categories.forEach(c=>g[c.categoryName]=c.score);
+  const nw={s:((g.mouthSmileLeft||0)+(g.mouthSmileRight||0))/2,j:g.jawOpen||0,b:g.browInnerUp||0,w:((g.eyeWideLeft||0)+(g.eyeWideRight||0))/2};
+  for(const k in nw)N[k]=N[k]*.4+nw[k]*.6;
+  const ex=ekspresi();
+  if(ex!==kini){kini=ex;pasang($('#dik'+id),ex||'biasa',4)}
+  $('#dtx'+id).textContent=ex==='gembira'?'Wajah Dikesan: GEMBIRA':ex==='terkejut'?'Wajah Dikesan: TERKEJUT':'Wajah Dikesan: biasa';
+  if(kam){[['#m1',N.s/(.45*KEP[S.kep])],['#m2',N.j/(.35*KEP[S.kep])],['#m3',Math.max(N.b/(.2*KEP[S.kep]),N.w/(.15*KEP[S.kep]))]].forEach(a=>$(a[0]).style.width=Math.min(100,a[1]*100)+'%');return}
+  /* dalam permainan */
+  if(G.fasa!=='soal')return;
+  if(G.perluBiasa){if(!ex)G.perluBiasa=false;else{ujiStat('Tunjukkan wajah biasa dahulu...');tahanBar(0);return}}
+  ujiStat('Tunjukkan ekspresi anda dan tahan sebentar.');
+  if(!ex){tahanEx=null;tahanBar(0);return}
+  if(ex!==tahanEx){tahanEx=ex;tahanT=now}
+  const p=Math.min(1,(now-tahanT)/TAHAN);tahanBar(p);
+  if(p>=1){tahanEx=null;tahanBar(0);hantar(ex)}
+}
+function tahanBar(p){$('#tahan i').style.width=(p*100)+'%'}
+
+/* ---- permainan ---- */
+let G={fasa:'henti'},Q=[],qi=0,tahap=0;
+const kocok=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const NT={0:'Semua Tahap',1:'Tahap 1: Mudah',2:'Tahap 2: Sederhana',3:'Tahap 3: Sukar'};
+function arahan(t){
+  tahap=t;
+  $('#aTahap').textContent=NT[t]+' | '+JUMLAH+' soalan';legenda($('#aLeg'),4);
+  $('#aMod').textContent=efektif()==='kamera'?'Kamera aktif. Tahan ekspresi anda sehingga bar penuh.':'Mod manual: tekan butang AYAT BETUL atau AYAT SALAH.';
+  show('arahan');
+}
+$('#bMulaP').onclick=()=>{
+  let p=tahap?D.filter(x=>x.t===tahap):D;
+  Q=kocok(p).slice(0,JUMLAH);if(!tahap)Q.sort((a,b)=>a.t-b.t);
+  G={fasa:'henti',skor:0,betul:0,salah:0,rantai:0,tm:0,ts:0};qi=0;show('main');soal();
+};
+$('#bUlang').onclick=()=>arahan(tahap);
+function susunMain(){
+  const k=efektif()==='kamera';
+  $('#camBox').style.display=k?'flex':'none';$('#bMati2').style.display=k?'block':'none';
+  $('#ops').classList.toggle('on',!k&&G.fasa!=='fb');
+}
+function hud(){$('#hSkor').textContent=G.skor;$('#hSoal').textContent=(qi+1)+'/'+Q.length}
+function soal(){
+  const q=Q[qi];clearInterval(G.tm);clearTimeout(G.ts);
+  G.fasa='sedia';G.perluBiasa=true;G.sisa=S.masa;tahanEx=null;tahanBar(0);
+  hud();$('#hMasa').textContent=S.masa;$('#bar i').style.width='100%';
+  $('#mTahap').textContent='Tahap '+q.t;$('#ayat').textContent=q.a;legenda($('#mLeg'),3);
+  $('#fb').classList.remove('on','x');
+  const bb=$('#bBetul'),bs=$('#bSalah');bb.innerHTML='';bs.innerHTML='';bb.disabled=bs.disabled=false;
+  bb.appendChild(ikon('gembira',3));bb.appendChild(document.createTextNode('AYAT BETUL'));
+  bs.appendChild(ikon('terkejut',3));bs.appendChild(document.createTextNode('AYAT SALAH'));
+  susunMain();
+  ujiStat('Bersedia... baca ayat itu.');
+  G.ts=setTimeout(()=>{if(G.fasa!=='sedia')return;G.fasa='soal';
+    G.tm=setInterval(()=>{if(G.fasa!=='soal')return;G.sisa=Math.max(0,G.sisa-.1);
+      $('#bar i').style.width=(G.sisa/S.masa*100)+'%';$('#hMasa').textContent=Math.ceil(G.sisa);
+      if(G.sisa<=0)hantar(null)},100)},SEDIA);
+}
+$('#bBetul').onclick=()=>{if(G.fasa==='soal'||G.fasa==='sedia')hantar('gembira','manual')};
+$('#bSalah').onclick=()=>{if(G.fasa==='soal'||G.fasa==='sedia')hantar('terkejut','manual')};
+function letup(){for(let i=0;i<26;i++){const d=document.createElement('div');d.className='px';d.style.left='50%';d.style.top='40%';d.style.setProperty('--x',(Math.random()*480-240)+'px');d.style.setProperty('--y',(Math.random()*360-220)+'px');document.body.appendChild(d);setTimeout(()=>d.remove(),1000)}}
+function kilat(w){const b=document.body;b.style.setProperty('--k',w);b.classList.remove('kilat');void b.offsetWidth;b.classList.add('kilat')}
+function hantar(ex,cara){
+  if(G.fasa==='fb'||G.fasa==='henti')return;
+  G.fasa='fb';clearInterval(G.tm);clearTimeout(G.ts);tahanBar(0);
+  const q=Q[qi],f=$('#fb');
+  const ok=ex!==null&&((ex==='gembira')===q.b);
+  let bn=0;
+  if(ok){G.rantai++;G.betul++;bn=G.rantai>=2?5:0;G.skor+=10+bn}else{G.rantai=0;G.salah++}
+  hud();$('#ops').classList.remove('on');$('#bBetul').disabled=$('#bSalah').disabled=true;
+  f.classList.toggle('x',!ok);
+  $('#fbt').textContent=ok?'Ekspresi Sepadan! +'+(10+bn)+' markah'+(bn?' (bonus 5)':''):(ex===null?'Masa Tamat! 0 markah':'Cuba Lagi! Ekspresi tidak sepadan. 0 markah');
+  const tunjuk=ex===null?'Tiada ekspresi dikesan sebelum masa tamat.':cara==='manual'?'Anda memilih: '+(ex==='gembira'?'AYAT BETUL':'AYAT SALAH')+'.':'Anda menunjukkan: wajah '+(ex==='gembira'?'gembira (ayat betul)':'terkejut (ayat salah)')+'.';
+  $('#fb1').innerHTML='<b>Jawapan:</b> '+(q.b?'BETUL':'SALAH')+'. '+tunjuk;
+  $('#fb2').innerHTML=q.b?'<b>Ayat:</b> Ayat ini sudah betul.':'<b>Pembetulan:</b> '+q.p;
+  $('#fb3').innerHTML='<b>Penerangan:</b> '+q.e;
+  $('#fb4').textContent='';
+  const n=$('#nxt');n.textContent=qi>=Q.length-1?'LIHAT KEPUTUSAN':'SOALAN SETERUSNYA';
+  n.onclick=()=>{qi++;qi>=Q.length?tamat():soal()};
+  f.classList.add('on');
+  if(ok){letup();kilat('rgba(57,255,106,.25)');pasang($('#dik2'),'gembira',4)}else kilat('rgba(255,122,122,.25)');
+  n.focus({preventScroll:true});
+}
+function tamat(){
+  show('tamat');
+  const p=G.betul*10;let g,u;
+  if(p<=30){g='PEMULA AYAT';u='Permulaan yang baik. Baca penerangan setiap soalan dan cuba lagi.'}
+  else if(p<=60){g='PENJELAJAH AYAT';u='Anda semakin maju. Teruskan berlatih mengenal kesalahan ayat.'}
+  else if(p<=80){g='PAKAR AYAT';u='Hebat! Anda dapat mengenal pasti kebanyakan kesalahan ayat.'}
+  else{g='JAGUH BAHASA';u='Cemerlang! Anda sangat mahir mengenal kesalahan ayat.';letup()}
+  $('#skor').textContent=G.skor;$('#gelar').textContent=g;$('#ulasan').textContent=u;
+  $('#ringkas').textContent='Jawapan betul: '+G.betul+' | Jawapan salah: '+G.salah+' | '+NT[tahap];
+}
+tetapan();
+window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop())});
+})();
+</script>
+</body>
+</html>
